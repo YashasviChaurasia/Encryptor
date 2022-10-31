@@ -1,0 +1,18 @@
+FROM ubuntu
+
+WORKDIR /server
+
+COPY . /server
+ENTRYPOINT ["tail", "-f", "/dev/null"]
+RUN apt-get update
+RUN apt-get install -y --no-install-recommends \
+        build-essential \
+        vim
+RUN apt-get install libssl-dev
+RUN base64 /dev/urandom | head -c 1000000 > million.txt 
+RUN base64 /dev/urandom | head -c 10000 > tk.txt
+RUN base64 /dev/urandom | head -c 100000 > hk.txt  
+RUN gcc testrun.c -lcrypto
+RUN taskset -c 0 ./a.out
+# CMD [ "cd", "non-blocking-servers" ]
+# CMD [ "./a.out" ]
